@@ -237,3 +237,87 @@ body {
 .card-body {
     background-color: #fff;
 }
+
+
+
+
+/* Estilos para manejar modales anidados correctamente */
+.modal {
+    overflow-y: auto !important;
+}
+
+.modal.show {
+    display: block !important;
+}
+
+/* Asegurar que el segundo modal aparezca sobre el primero */
+.modal.show ~ .modal.show {
+    z-index: 1060;
+}
+
+.modal-backdrop.show ~ .modal-backdrop.show {
+    z-index: 1055;
+}
+
+/* Cuando hay múltiples backdrops, ajustar opacidad */
+.modal-backdrop + .modal-backdrop {
+    opacity: 0.3;
+}
+
+/* Sticky header en tabla de materiales */
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f8f9fa;
+}
+
+/* Mejorar scroll en tablas */
+.table-responsive {
+    position: relative;
+}
+
+/* Animación suave para alertas */
+.alert {
+    animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Mejora visual para materiales agregados */
+#cuerpoTablaMateriales tr {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Estilo para botones deshabilitados */
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Mejorar visibilidad del spinner */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+}

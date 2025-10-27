@@ -6,7 +6,7 @@ include_once '../includes/sidebar.php';
 <div class="main-content p-4">
     <div class="container-fluid"> <br><br><br>
         <!-- Título principal -->
-        <h2 class="fw-bold text-dark mb-4">Gestión de Materia</h2>
+        <h2 class="fw-bold text-dark mb-4">Gestión de Materiales</h2>
 
         <ul class="nav nav-tabs mb-4" id="articulosTabs" role="tablist">
             <li class="nav-item">
@@ -98,7 +98,7 @@ include_once '../includes/sidebar.php';
                                             echo "<td>" . htmlspecialchars($m['unidad_medida']) . "</td>";
                                             echo "<td>$" . number_format($m['costo'], 2, ',', '.') . "</td>";
                                             echo "<td>" . $m['cantidad'] . "</td>";
-                                            echo "<td>" . $m['fecha_registro'] . "</td>";
+                                            echo "<td>" . $m['fecha_creacion'] . "</td>";
                                             echo "</tr>";
                                         }
                                     } else {

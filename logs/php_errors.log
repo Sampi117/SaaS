@@ -1,0 +1,257 @@
+[27-Oct-2025 23:00:00 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => jabon22
+    [costos_indirectos] => 0.00
+    [costos_financieros] => 0.00
+    [costos_distribucion] => 0.00
+    [materiales] => [{"id":4,"cantidad":1},{"id":5,"cantidad":1},{"id":3,"cantidad":1}]
+)
+
+[27-Oct-2025 23:00:00 Europe/Berlin] Materiales decodificados: Array
+(
+    [0] => Array
+        (
+            [id] => 4
+            [cantidad] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 5
+            [cantidad] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [cantidad] => 1
+        )
+
+)
+
+[27-Oct-2025 23:00:00 Europe/Berlin] Categoría creada con ID: 5
+[27-Oct-2025 23:00:00 Europe/Berlin] Material insertado - ID: 4, Cantidad: 1
+[27-Oct-2025 23:00:00 Europe/Berlin] Material insertado - ID: 5, Cantidad: 1
+[27-Oct-2025 23:00:00 Europe/Berlin] Material insertado - ID: 3, Cantidad: 1
+[27-Oct-2025 23:00:00 Europe/Berlin] Total materiales insertados: 3
+[27-Oct-2025 23:00:00 Europe/Berlin] Transacción completada exitosamente
+[27-Oct-2025 23:07:50 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => paula dotor
+    [costos_indirectos] => 5000
+    [costos_financieros] => 1000
+    [costos_distribucion] => 5000
+    [materiales] => [{"id":4,"cantidad":5},{"id":5,"cantidad":4},{"id":3,"cantidad":3}]
+)
+
+[27-Oct-2025 23:07:50 Europe/Berlin] Materiales decodificados: Array
+(
+    [0] => Array
+        (
+            [id] => 4
+            [cantidad] => 5
+        )
+
+    [1] => Array
+        (
+            [id] => 5
+            [cantidad] => 4
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [cantidad] => 3
+        )
+
+)
+
+[27-Oct-2025 23:07:50 Europe/Berlin] Categoría creada con ID: 6
+[27-Oct-2025 23:07:50 Europe/Berlin] Material insertado - ID: 4, Cantidad: 5
+[27-Oct-2025 23:07:50 Europe/Berlin] Material insertado - ID: 5, Cantidad: 4
+[27-Oct-2025 23:07:50 Europe/Berlin] Material insertado - ID: 3, Cantidad: 3
+[27-Oct-2025 23:07:50 Europe/Berlin] Total materiales insertados: 3
+[27-Oct-2025 23:07:50 Europe/Berlin] Transacción completada exitosamente
+[27-Oct-2025 23:09:09 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => morgan
+    [costos_indirectos] => 0.00
+    [costos_financieros] => 0.00
+    [costos_distribucion] => 0.00
+    [materiales] => [{"id":4,"cantidad":1},{"id":5,"cantidad":1},{"id":3,"cantidad":1}]
+)
+
+[27-Oct-2025 23:09:09 Europe/Berlin] Materiales decodificados: Array
+(
+    [0] => Array
+        (
+            [id] => 4
+            [cantidad] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 5
+            [cantidad] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [cantidad] => 1
+        )
+
+)
+
+[27-Oct-2025 23:09:09 Europe/Berlin] Categoría creada con ID: 7
+[27-Oct-2025 23:09:09 Europe/Berlin] Material insertado - ID: 4, Cantidad: 1
+[27-Oct-2025 23:09:09 Europe/Berlin] Material insertado - ID: 5, Cantidad: 1
+[27-Oct-2025 23:09:09 Europe/Berlin] Material insertado - ID: 3, Cantidad: 1
+[27-Oct-2025 23:09:09 Europe/Berlin] Total materiales insertados: 3
+[27-Oct-2025 23:09:09 Europe/Berlin] Transacción completada exitosamente
+[27-Oct-2025 23:11:50 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => paula
+    [costos_indirectos] => 0.00
+    [costos_financieros] => 0.00
+    [costos_distribucion] => 0.00
+    [materiales] => []
+)
+
+[27-Oct-2025 23:11:50 Europe/Berlin] Materiales decodificados: Array
+(
+)
+
+[27-Oct-2025 23:11:50 Europe/Berlin] Categoría creada con ID: 8
+[27-Oct-2025 23:11:50 Europe/Berlin] Transacción completada exitosamente
+[27-Oct-2025 23:17:05 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => oijhg
+    [costos_indirectos] => 0.00
+    [costos_financieros] => 0.00
+    [costos_distribucion] => 0.00
+    [materiales] => [{"id":4,"cantidad":1},{"id":5,"cantidad":1},{"id":3,"cantidad":1}]
+)
+
+[27-Oct-2025 23:17:05 Europe/Berlin] Materiales decodificados: Array
+(
+    [0] => Array
+        (
+            [id] => 4
+            [cantidad] => 1
+        )
+
+    [1] => Array
+        (
+            [id] => 5
+            [cantidad] => 1
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [cantidad] => 1
+        )
+
+)
+
+[27-Oct-2025 23:17:05 Europe/Berlin] Categoría creada con ID: 9
+[27-Oct-2025 23:17:05 Europe/Berlin] Material insertado - ID: 4, Cantidad: 1
+[27-Oct-2025 23:17:05 Europe/Berlin] Material insertado - ID: 5, Cantidad: 1
+[27-Oct-2025 23:17:05 Europe/Berlin] Material insertado - ID: 3, Cantidad: 1
+[27-Oct-2025 23:17:05 Europe/Berlin] Total materiales insertados: 3
+[27-Oct-2025 23:17:05 Europe/Berlin] Transacción completada exitosamente
+[27-Oct-2025 23:21:12 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => oijhg
+    [costos_indirectos] => 555
+    [costos_financieros] => 55555555
+    [costos_distribucion] => 5555555
+    [materiales] => [{"id":4,"cantidad":5},{"id":5,"cantidad":5},{"id":3,"cantidad":6}]
+)
+
+[27-Oct-2025 23:21:12 Europe/Berlin] Materiales decodificados: Array
+(
+    [0] => Array
+        (
+            [id] => 4
+            [cantidad] => 5
+        )
+
+    [1] => Array
+        (
+            [id] => 5
+            [cantidad] => 5
+        )
+
+    [2] => Array
+        (
+            [id] => 3
+            [cantidad] => 6
+        )
+
+)
+
+[27-Oct-2025 23:21:12 Europe/Berlin] Error PDO en guardar_categoria.php: SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry 'oijhg' for key 'categorias.nombre'
+[27-Oct-2025 23:21:12 Europe/Berlin] Stack trace: #0 C:\Users\paula\Proyecto SaaS\controllers\guardar_categoria.php(54): PDOStatement->execute(Array)
+#1 {main}
+[27-Oct-2025 23:30:53 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => maria
+    [costos_indirectos] => 66
+    [costos_financieros] => 66666666
+    [costos_distribucion] => 66666
+    [materiales] => [{"id":5,"cantidad":5},{"id":3,"cantidad":6},{"id":2,"cantidad":5}]
+)
+
+[27-Oct-2025 23:30:53 Europe/Berlin] Materiales decodificados: Array
+(
+    [0] => Array
+        (
+            [id] => 5
+            [cantidad] => 5
+        )
+
+    [1] => Array
+        (
+            [id] => 3
+            [cantidad] => 6
+        )
+
+    [2] => Array
+        (
+            [id] => 2
+            [cantidad] => 5
+        )
+
+)
+
+[27-Oct-2025 23:30:53 Europe/Berlin] Categoría creada con ID: 11
+[27-Oct-2025 23:30:53 Europe/Berlin] Material insertado - ID: 5, Cantidad: 5
+[27-Oct-2025 23:30:53 Europe/Berlin] Material insertado - ID: 3, Cantidad: 6
+[27-Oct-2025 23:30:53 Europe/Berlin] Material insertado - ID: 2, Cantidad: 5
+[27-Oct-2025 23:30:53 Europe/Berlin] Total materiales insertados: 3
+[27-Oct-2025 23:30:53 Europe/Berlin] Transacción completada exitosamente
+[27-Oct-2025 23:31:16 Europe/Berlin] POST recibido: Array
+(
+    [nombre] => paula dotorkk
+    [costos_indirectos] => 0.00
+    [costos_financieros] => 0.00
+    [costos_distribucion] => 0.00
+    [materiales] => [{"id":1,"cantidad":1100}]
+)
+
+[27-Oct-2025 23:31:16 Europe/Berlin] Materiales decodificados: Array
+(
+    [0] => Array
+        (
+            [id] => 1
+            [cantidad] => 1100
+        )
+
+)
+
+[27-Oct-2025 23:31:16 Europe/Berlin] Categoría creada con ID: 12
+[27-Oct-2025 23:31:16 Europe/Berlin] Material insertado - ID: 1, Cantidad: 1100
+[27-Oct-2025 23:31:16 Europe/Berlin] Total materiales insertados: 1
+[27-Oct-2025 23:31:16 Europe/Berlin] Transacción completada exitosamente
