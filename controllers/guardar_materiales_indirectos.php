@@ -8,8 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $cantidad = intval($_POST['cantidad']);
 
     if ($nombre != "" && $unidad_medida != "" && $costo > 0 && $cantidad >= 0) {
-        $sql = "INSERT INTO tb_materiales_indirectos (nombre, unidad_medida, costo, cantidad) 
-                VALUES (:nombre, :unidad_medida, :costo, :cantidad)";
+        $sql = "INSERT INTO tb_materiales_indirectos (nombre, unidad_medida, costo, cantidad, estado) 
+                VALUES (:nombre, :unidad_medida, :costo, :cantidad, 'Activo')";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             'nombre' => $nombre,

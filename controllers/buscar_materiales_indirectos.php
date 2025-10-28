@@ -52,14 +52,14 @@ try {
         'message' => 'Error en la búsqueda de materiales',
         'error' => $e->getMessage()
     ];
-    error_log('Error PDO en buscar_materiales.php: ' . $e->getMessage());
+    error_log('Error PDO en buscar_materiales_indirectos.php: ' . $e->getMessage());
 } catch (Exception $e) {
     $response = [
         'success' => false,
         'message' => 'Error inesperado',
         'error' => $e->getMessage()
     ];
-    error_log('Error en buscar_materiales.php: ' . $e->getMessage());
+    error_log('Error en buscar_materiales_indirectos.php: ' . $e->getMessage());
 }
 
 echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);

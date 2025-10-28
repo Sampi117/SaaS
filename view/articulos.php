@@ -10,11 +10,7 @@ include_once '../includes/sidebar.php';
 
         <!-- Pestañas principales -->
         <ul class="nav nav-tabs mb-4" id="articulosTabs" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="categoria-tab" data-bs-toggle="tab" href="#categoria" role="tab">
-                    <i class="bi bi-tags"></i> Categoría
-                </a>
-            </li>
+            
             <li class="nav-item">
                 <a class="nav-link" id="ficha-tab" data-bs-toggle="tab" href="#ficha" role="tab">
                     <i class="bi bi-file-earmark-text"></i> Ficha Técnica
@@ -30,18 +26,6 @@ include_once '../includes/sidebar.php';
 
         <!-- Contenido de las pestañas -->
         <div class="tab-content" id="articulosTabsContent">
-            <!-- Categoría -->
-            <div class="tab-pane fade show active" id="categoria" role="tabpanel">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
-                        <i class="bi bi-tags"></i> Gestión de Categorías
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Aquí podrás agregar, editar o eliminar las categorías de tus artículos.</p>
-                        <!-- Aquí puedes colocar tu tabla o formulario -->
-                    </div>
-                </div>
-            </div>
 
             <!-- Ficha Técnica -->
             <div class="tab-pane fade" id="ficha" role="tabpanel">

@@ -130,7 +130,7 @@ body {
 
 .card-btn:hover {
     transform: translateY(-5px);
-    background: linear-gradient(180deg, #84b9da, #ffffff);
+    background: linear-gradient(180deg, #9cd2f3, #ffffff);
     box-shadow: 0 6px 15px rgba(53, 151, 208, 0.2);
 }
 
