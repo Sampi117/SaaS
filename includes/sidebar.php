@@ -2,6 +2,7 @@
 $menu = [
     ['nombre' => 'Página principal', 'icono' => 'bi-house-door', 'link' => '../view/PaginaPrincipal.php'],
     ['nombre' => 'Articulos', 'icono' => 'bi-box', 'link' => '../view/articulos.php'],
+    ['nombre' => 'Procesos y Operaciones', 'icono' => 'bi bi-gear', 'link' => '../view/procesos.php'], 
     ['nombre' => 'Categoria', 'icono' => 'bi-wallet2', 'link' => '../view/categoria.php'], 
     ['nombre' => 'Clientes', 'icono' => 'bi-people', 'link' => '../view/clientes.php'],
     ['nombre' => 'Compras', 'icono' => 'bi-cart-check', 'link' => '../view/compras.php'],
@@ -18,11 +19,11 @@ $current_page = basename($_SERVER['PHP_SELF']);
 $colorSeccion = [
     'PaginaPrincipal.php' => 'linear-gradient(90deg, #396ac0ff, #5da3e0ff)',
     'articulos.php'        => 'linear-gradient(90deg, #1b4a9aff, #476ebcff)',
+    'procesos.php'           => 'linear-gradient(90deg, #2865c6ff, #50c2efff)',
     'categoria.php'          => 'linear-gradient(90deg, #0064efff, #5e89d3ff)',
     'clientes.php'         => 'linear-gradient(90deg, #15a9c0ff, #427bf5ff)',
     'compras.php'          => 'linear-gradient(90deg, #2e367dff, #8188c7ff)',
     'materiales.php'         => 'linear-gradient(90deg, #2581f9ff, #42a8bdff)', 
-    /* 'nomina.php'           => 'linear-gradient(90deg, #2865c6ff, #50c2efff)', */
     'personal.php'         => 'linear-gradient(90deg, #41536dff, #3e6ac8ff)',
     'produccion.php'       => 'linear-gradient(90deg, #575da9ff, #5c91c0ff)',
     'proveedores.php'      => 'linear-gradient(90deg, #003369ff, #2675a6ff)'

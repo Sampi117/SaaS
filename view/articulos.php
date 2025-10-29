@@ -17,11 +17,6 @@ include_once '../includes/sidebar.php';
                 </a>
             </li>
            
-            <li class="nav-item">
-                <a class="nav-link" id="procesos-tab" data-bs-toggle="tab" href="#procesos" role="tab">
-                    <i class="bi bi-gear"></i> Procesos y Operaciones
-                </a>
-            </li>
         </ul>
 
         <!-- Contenido de las pestañas -->
@@ -39,29 +34,7 @@ include_once '../includes/sidebar.php';
                 </div>
             </div>
 
-            <!-- Materia Prima -->
-            <div class="tab-pane fade" id="materia" role="tabpanel">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
-                        <i class="bi bi-box-seam"></i> Materia Prima
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Gestiona los insumos y materiales utilizados para la fabricación de artículos.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Procesos y Operaciones -->
-            <div class="tab-pane fade" id="procesos" role="tabpanel">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
-                        <i class="bi bi-gear"></i> Procesos y Operaciones
-                    </div>
-                    <div class="card-body">
-                        <p class="text-muted">Controla las etapas y operaciones involucradas en la producción de los artículos.</p>
-                    </div>
-                </div>
-            </div>
+            
         </div>
     </div>
 </div>
