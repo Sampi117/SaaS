@@ -4,8 +4,8 @@ include_once '../includes/sidebar.php';
 ?>
 
 <div class="main-content">
-    <div class="container py-5">
-        <h2 class="text-center mb-4 text-primary fw-bold">Panel Principal</h2>
+    <div class="container py-3">
+        <h2 class="text-center mb-4 fw-bold">Panel fbhtyg</h2>
 
         <!-- 🔍 Buscador -->
         <div class="row justify-content-center mb-4">
@@ -18,9 +18,9 @@ include_once '../includes/sidebar.php';
         <div class="row g-4 justify-content-center" id="contenedor-botones">
             <?php
             $secciones = [
-                ['nombre' => 'Articulos', 'icono' => 'bi-box', 'link' => 'articulos.php'],
+                ['nombre' => 'Ficha Tecnica', 'icono' => 'bi bi-file-earmark-text', 'link' => 'fichaTecnica.php'],
                 ['nombre' => 'Procesos y Operaciones', 'icono' => 'bi bi-gear', 'link' => '../view/procesos.php'],
-                ['nombre' => 'Categoria', 'icono' => 'bi-person-lines-fill', 'link' => '../view/categoria.php'],
+                ['nombre' => 'Categorias', 'icono' => 'bi-person-lines-fill', 'link' => '../view/categoria.php'],
                 ['nombre' => 'Clientes', 'icono' => 'bi-people', 'link' => '../view/clientes.php'],
                 ['nombre' => 'Compras', 'icono' => 'bi-cart-check', 'link' => '../view/compras.php'],
                 ['nombre' => 'Materiales', 'icono' => 'bi-graph-up', 'link' => '../view/materiales.php'], 

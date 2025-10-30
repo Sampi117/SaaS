@@ -10,8 +10,8 @@
 </head>
 <body>
     <header class="topbar d-flex justify-content-between align-items-center px-4">
-        <h5 class="m-0 text-white fw-semibold">SaaS Empresarial</h5>
-        <div class="user-info text-white">
+        <h5 class="m-0 fw-semibold">SaaS Empresarial</h5>
+        <div class="user-info">
             <i class="bi bi-person-circle me-2"></i> Usuario
         </div>
-    </header><br><br><br>
+    </header><br>

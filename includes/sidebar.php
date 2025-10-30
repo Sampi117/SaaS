@@ -1,9 +1,9 @@
 <?php
 $menu = [
     ['nombre' => 'Página principal', 'icono' => 'bi-house-door', 'link' => '../view/PaginaPrincipal.php'],
-    ['nombre' => 'Articulos', 'icono' => 'bi-box', 'link' => '../view/articulos.php'],
+    ['nombre' => 'Ficha Tecnica', 'icono' => 'bi bi-file-earmark-text', 'link' => '../view/fichaTecnica.php'],
     ['nombre' => 'Procesos y Operaciones', 'icono' => 'bi bi-gear', 'link' => '../view/procesos.php'], 
-    ['nombre' => 'Categoria', 'icono' => 'bi-wallet2', 'link' => '../view/categoria.php'], 
+    ['nombre' => 'Categorias', 'icono' => 'bi-wallet2', 'link' => '../view/categoria.php'], 
     ['nombre' => 'Clientes', 'icono' => 'bi-people', 'link' => '../view/clientes.php'],
     ['nombre' => 'Compras', 'icono' => 'bi-cart-check', 'link' => '../view/compras.php'],
      ['nombre' => 'Materiales', 'icono' => 'bi-graph-up', 'link' => '../view/materiales.php'], 
@@ -17,17 +17,17 @@ $menu = [
 $current_page = basename($_SERVER['PHP_SELF']);
 
 $colorSeccion = [
-    'PaginaPrincipal.php' => 'linear-gradient(90deg, #396ac0ff, #5da3e0ff)',
-    'articulos.php'        => 'linear-gradient(90deg, #1b4a9aff, #476ebcff)',
-    'procesos.php'           => 'linear-gradient(90deg, #2865c6ff, #50c2efff)',
-    'categoria.php'          => 'linear-gradient(90deg, #0064efff, #5e89d3ff)',
-    'clientes.php'         => 'linear-gradient(90deg, #15a9c0ff, #427bf5ff)',
-    'compras.php'          => 'linear-gradient(90deg, #2e367dff, #8188c7ff)',
-    'materiales.php'         => 'linear-gradient(90deg, #2581f9ff, #42a8bdff)', 
-    'personal.php'         => 'linear-gradient(90deg, #41536dff, #3e6ac8ff)',
-    'produccion.php'       => 'linear-gradient(90deg, #575da9ff, #5c91c0ff)',
-    'proveedores.php'      => 'linear-gradient(90deg, #003369ff, #2675a6ff)'
-    /* 'ventas.php'           => 'linear-gradient(90deg, #2e577dff, #819ec7ff)' */
+    'PaginaPrincipal.php' => '#F9F7F3',
+    'fichaTecnica.php'    => '#F5F0E1',
+    'procesos.php'        => '#F5ECE0',
+    'categoria.php'       => '#F5EEE6',
+    'clientes.php'        => '#F5F0E1',
+    'compras.php'         => '#F5ECE0',
+    'materiales.php'      => '#F5EEE6',
+    'personal.php'        => '#F5F0E1',
+    'produccion.php'      => '#F5ECE0',
+    'proveedores.php'     => '#F5EEE6'
+    /* 'ventas.php'       => '#F5F0E1' */
 ];
 ?>
 
@@ -36,11 +36,11 @@ $colorSeccion = [
         <?php foreach ($menu as $item): 
             $pageName = basename($item['link']);
             $isActive = ($pageName == $current_page);
-            $bgColor = $isActive ? "background: {$colorSeccion[$pageName]}; color: white; font-weight:600; box-shadow: inset 3px 0 0 #1b5e20;" : "";
+            $bgColor = $isActive ? "background: {$colorSeccion[$pageName]}; color: var(--primary-dark); font-weight:600; border-left: 4px solid var(--primary);" : "";
         ?>
             <li class="nav-item">
                 <a href="<?= $item['link'] ?>" class="nav-link d-flex align-items-center <?= $isActive ? 'active' : '' ?>" style="<?= $bgColor ?>">
-                    <i class="bi <?= $item['icono'] ?> me-2" style="<?= $isActive ? 'color:white;' : '' ?>"></i> 
+                    <i class="bi <?= $item['icono'] ?> me-2" style="<?= $isActive ? 'color: var(--primary-dark);' : 'color: var(--accent);' ?>"></i> 
                     <?= $item['nombre'] ?>
                 </a>
             </li>

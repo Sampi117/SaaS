@@ -502,7 +502,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </tr>`;
         
         // Realizar la petición AJAX
-        fetch(`../controllers/buscar_materiales.php?q=${encodeURIComponent(termino)}`)
+        fetch(`../controllers/buscar_materiales_indirectos.php?q=${encodeURIComponent(termino)}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`Error HTTP: ${response.status}`);
