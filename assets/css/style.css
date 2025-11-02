@@ -386,12 +386,13 @@ h2::after {
 }
 
 .table thead th {
-    background-color: var(--primary);
+    background-color: #b79b79d7;
     color: var(--white);
     border: none;
     font-weight: 500;
     padding: 1rem;
 }
+
 
 .table tbody tr {
     transition: all 0.2s ease;
@@ -418,7 +419,7 @@ h2::after {
 }
 
 .card-header {
-    background-color: var(--primary);
+    background-color:  #a49179d7;
     color: var(--white);
     font-weight: 600;
     border: none;

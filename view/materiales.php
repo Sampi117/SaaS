@@ -20,7 +20,7 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
         <ul class="nav nav-tabs mb-4" id="articulosTabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="materia-tab" data-bs-toggle="tab" href="#materia" role="tab">
-                    <i class="bi bi-box-seam"></i> Materiales Directos
+                    <i class="bi bi-box-seam"></i> Materia Prima
                 </a>
             </li>
             <li class="nav-item">
@@ -35,8 +35,8 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
             <!-- === TAB MATERIALES DIRECTOS === -->
             <div class="tab-pane fade show active" id="materia" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
-                        <i class="bi bi-box-seam"></i> Materiales Directos
+                    <div class="card-header fw-bold">
+                        <i class="bi bi-box-seam"></i> Materia Prima
                     </div>
                     <div class="card-body">
                         <p class="text-muted">Gestiona los materiales directos utilizados en la producción.</p>
@@ -66,7 +66,7 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                         <!-- Tabla de Materiales Directos -->
                         <div class="shadow-sm rounded bg-white">
                             <table class="table table-hover align-middle mb-0 text-center">
-                                <thead class="table-primary">
+                                <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nombre</th>
@@ -146,7 +146,7 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
             <!-- === TAB MATERIALES INDIRECTOS === -->
             <div class="tab-pane fade" id="materiales" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
+                    <div class="card-header fw-bold">
                         <i class="bi bi-tools"></i> Materiales Indirectos
                     </div>
                     <div class="card-body">

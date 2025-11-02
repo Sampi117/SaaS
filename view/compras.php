@@ -37,7 +37,7 @@ include_once '../includes/sidebar.php';
             <!-- Facturación de Compras -->
             <div class="tab-pane fade show active" id="facturacion" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
+                    <div class="card-header fw-bold">
                         <i class="bi bi-receipt"></i> Facturación de Compras
                     </div>
                     <div class="card-body">
@@ -50,7 +50,7 @@ include_once '../includes/sidebar.php';
             <!-- Inventario -->
             <div class="tab-pane fade" id="inventario" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
+                    <div class="card-header fw-bold">
                         <i class="bi bi-box-seam"></i> Control de Inventario
                     </div>
                     <div class="card-body">
@@ -62,7 +62,7 @@ include_once '../includes/sidebar.php';
             <!-- Orden de Compra -->
             <div class="tab-pane fade" id="orden" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
+                    <div class="card-header fw-bold">
                         <i class="bi bi-clipboard-check"></i> Orden de Compra
                     </div>
                     <div class="card-body">
@@ -74,7 +74,7 @@ include_once '../includes/sidebar.php';
             <!-- Remisión de Compra -->
             <div class="tab-pane fade" id="remision" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
+                    <div class="card-header fw-bold">
                         <i class="bi bi-truck"></i> Remisión de Compra
                     </div>
                     <div class="card-body">

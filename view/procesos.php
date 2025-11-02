@@ -29,7 +29,7 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
         <div class="tab-content" id="procesosTabsContent">
             <div class="tab-pane fade show active" id="procesos" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
+                    <div class="card-header fw-bold">
                         <i class="bi bi-diagram-3"></i> Procesos
                     </div>
                     <div class="card-body">
@@ -59,7 +59,7 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="shadow-sm rounded bg-white">
                             <table class="table table-hover align-middle mb-0 text-center">
-                                <thead class="table-primary">
+                                <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>Nombre</th>
@@ -150,7 +150,7 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
 
             <div class="tab-pane fade" id="operaciones" role="tabpanel">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-light fw-bold">
+                    <div class="card-header fw-bold">
                         <i class="bi bi-gear"></i> Operaciones
                     </div>
                     <div class="card-body">
@@ -178,7 +178,7 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
 
                         <div class="shadow-sm rounded bg-white">
                             <table class="table table-hover align-middle mb-0 text-center">
-                                <thead class="table-primary">
+                                <thead class="table-success">
                                     <tr>
                                         <th>ID</th>
                                         <th>Nombre</th>
@@ -247,7 +247,7 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
 <div class="modal fade" id="modalAgregarOperacion" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-success text-white">
                 <h5 class="modal-title">Agregar Operación</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -271,7 +271,7 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
 <div class="modal fade" id="modalAgregarProceso" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title">Agregar Proceso</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -286,12 +286,12 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
                         <label class="form-label">Operaciones <span class="text-danger">*</span></label>
                         <div class="table-responsive">
                             <table class="table table-sm table-bordered">
-                                <thead class="table-light">
+                                <thead>
                                     <tr>
                                         <th width="10%">Seleccionar</th>
                                         <th width="30%">Operación</th>
                                         <th width="20%">Costo ($)</th>
-                                        <th width="20%">Costo Terceros ($)</th>
+                                        <th width="20%">Costo Terceros</th>
                                         <th width="20%">Tiempo (horas)</th>
                                     </tr>
                                 </thead>
@@ -352,13 +352,13 @@ $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
 <div class="modal fade" id="modalVerProceso" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header text-white">
                 <h5 class="modal-title">Detalles del Proceso</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body" id="detalleProceso">
                 <div class="text-center my-5">
-                    <div class="spinner-border text-primary" role="status"></div>
+                    <div class="spinner-border" role="status"></div>
                     <p class="mt-2">Cargando información...</p>
                 </div>
             </div>
@@ -598,7 +598,7 @@ document.getElementById('modalVerProceso').addEventListener('show.bs.modal', fun
     const detalleProceso = document.getElementById('detalleProceso');
     detalleProceso.innerHTML = `
         <div class="text-center my-5">
-            <div class="spinner-border text-primary" role="status"></div>
+            <div class="spinner-border " role="status"></div>
             <p class="mt-2">Cargando información...</p>
         </div>
     `;
