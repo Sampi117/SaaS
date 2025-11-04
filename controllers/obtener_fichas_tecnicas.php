@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 require_once '../config/conexion.php';
 
-$response = ['success' => false, 'data' => [], 'total' => 0];
+$response = ['success' => false, 'data' => [], 'recordsTotal' => 0, 'recordsFiltered' => 0];
 
 try {
     // Parámetros de búsqueda
@@ -15,20 +15,21 @@ try {
                 ft.id, 
                 ft.referencia, 
                 ft.descripcion, 
-                c.nombre_categoria as categoria, 
+                c.nombre as categoria, 
                 ft.color, 
                 ft.estado, 
                 ft.fecha_creacion, 
-                ft.imagen
+                ft.imagen,
+                ft.suela
             FROM fichas_tecnicas ft
-            LEFT JOIN categorias c ON ft.id_categoria = c.id_categoria
+            LEFT JOIN categorias c ON ft.id_categoria = c.id
             WHERE 1=1";
     
     $params = [];
     
     // Aplicar filtros
     if (!empty($search)) {
-        $sql .= " AND (ft.referencia LIKE ? OR ft.descripcion LIKE ? OR c.nombre_categoria LIKE ? OR ft.color LIKE ?)";
+        $sql .= " AND (ft.referencia LIKE ? OR ft.descripcion LIKE ? OR c.nombre LIKE ? OR ft.color LIKE ?)";
         $searchTerm = "%$search%";
         $params[] = $searchTerm;
         $params[] = $searchTerm;
@@ -62,6 +63,11 @@ try {
         // Si no hay descripción, poner guión
         if (empty($ficha['descripcion'])) {
             $ficha['descripcion'] = '-';
+        } else {
+            // Limitar descripción a 100 caracteres
+            if (strlen($ficha['descripcion']) > 100) {
+                $ficha['descripcion'] = substr($ficha['descripcion'], 0, 100) . '...';
+            }
         }
         
         // Si hay una imagen, construir la URL completa

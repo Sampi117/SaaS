@@ -9,27 +9,46 @@ include_once '../controllers/listar_materiales.php';
 <div class="main-content p-4">
     <div class="container-fluid">
         <br><br><br>
-        <!-- Título principal -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold text-dark">Ficha Técnica</h2>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaFichaModal">
-                <i class="fas fa-plus"></i> Añadir Ficha Técnica
-            </button>
-        </div>
+        <h2 class="fw-bold text-dark mb-4">Gestión de Fichas Técnicas</h2>
 
-        <!-- Tabla de fichas técnicas -->
-        <div class="card shadow-sm">
+        <div class="card shadow-sm border-0">
+            <div class="card-header fw-bold">
+                <i class="bi bi-file-earmark-text"></i> Fichas Técnicas
+            </div>
             <div class="card-body">
+                <p class="text-muted">Gestiona las fichas técnicas de los productos.</p>
+
+                <?php if(isset($_GET['msg']) && isset($_GET['msg_type'])): ?>
+                    <div class="alert alert-<?= htmlspecialchars($_GET['msg_type']) ?> alert-dismissible fade show" role="alert">
+                        <?= htmlspecialchars($_GET['msg']) ?>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                <?php endif; ?>
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Buscar ficha..." id="buscarFicha">
+                            <button class="btn btn-outline-primary" type="button" id="btnBuscarFicha">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nuevaFichaModal">
+                        <i class="bi bi-plus-circle"></i> Agregar Ficha
+                    </button>
+                </div>
+
                 <div class="table-responsive">
-                    <table id="tablaFichas" class="table table-hover">
+                    <table id="tablaFichas" class="table table-hover align-middle">
                         <thead class="table-light">
-                            <tr>
+                            <tr class="text-center">
                                 <th>Referencia</th>
                                 <th>Descripción</th>
                                 <th>Categoría</th>
                                 <th>Color</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th style="width: 200px;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,8 +56,6 @@ include_once '../controllers/listar_materiales.php';
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -46,7 +63,7 @@ include_once '../controllers/listar_materiales.php';
 <div class="modal fade" id="nuevaFichaModal" tabindex="-1" aria-labelledby="nuevaFichaModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title" id="nuevaFichaModalLabel">Nueva Ficha Técnica</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -141,7 +158,7 @@ include_once '../controllers/listar_materiales.php';
                             
                             <div class="mb-3">
                                 <label class="form-label fw-bold">Vista Previa de Tallas</label>
-                                <div id="tallasPreview" class="d-flex flex-wrap gap-2 p-3 border rounded bg-light">
+                                <div id="tallasPreview" class="d-flex flex-wrap gap-2 p-3 border rounded ">
                                     <span class="badge bg-secondary">36, 37, 38, 39, 40, 41, 42</span>
                                 </div>
                             </div>
@@ -151,7 +168,7 @@ include_once '../controllers/listar_materiales.php';
                         <div class="tab-pane fade" id="procesos" role="tabpanel">
                             <div class="table-responsive">
                                 <table class="table table-sm table-bordered">
-                                    <thead class="table-light">
+                                    <thead class="table-secondary">
                                         <tr>
                                             <th width="25%">Proceso</th>
                                             <th width="18%">Mano de Obra</th>
@@ -245,7 +262,7 @@ include_once '../controllers/listar_materiales.php';
                         <div class="tab-pane fade" id="materiales" role="tabpanel">
                             <div class="table-responsive">
                                 <table class="table table-sm table-bordered">
-                                    <thead class="table-light">
+                                    <thead class="card-header">
                                         <tr>
                                             <th width="15%">Material</th>
                                             <th width="18%">Descripción</th>
@@ -319,8 +336,11 @@ include_once '../controllers/listar_materiales.php';
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary">Guardar Ficha Técnica</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="button-text">Guardar Ficha</span>
+                        <span class="spinner-border spinner-border-sm d-none ms-2" role="status"></span>
+                    </button>
                 </div>
             </form>
         </div>
@@ -331,7 +351,7 @@ include_once '../controllers/listar_materiales.php';
 <div class="modal fade" id="verFichaModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
+            <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title">Detalle de Ficha Técnica</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -361,6 +381,14 @@ $(document).ready(function() {
     
     // Inicializar DataTable
     var table = $('#tablaFichas').DataTable({
+        language: {
+            url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+        },
+        responsive: true,
+        order: [[0, 'asc']],
+        dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+             "<'row'<'col-sm-12'tr>>" +
+             "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
         ajax: {
             url: '../controllers/obtener_fichas_tecnicas.php',
             dataSrc: 'data'
@@ -382,16 +410,14 @@ $(document).ready(function() {
                 data: null,
                 render: function(data, type, row) {
                     return `
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-info btn-ver" data-id="${row.id}">
-                                <i class="fas fa-eye"></i>
+                        <div class="d-flex justify-content-center gap-1">
+                            <button class="btn btn-sm btn-outline-primary btn-ver" data-id="${row.id}" title="Ver detalles">
+                                <i class="bi bi-eye"></i>
                             </button>
-                            <button class="btn btn-warning btn-editar" data-id="${row.id}">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn ${row.estado == 1 ? 'btn-danger' : 'btn-success'} btn-estado" 
-                                    data-id="${row.id}" data-estado="${row.estado}">
-                                <i class="fas ${row.estado == 1 ? 'fa-times' : 'fa-check'}"></i>
+                            <button class="btn btn-sm btn-outline-${row.estado == 1 ? 'danger' : 'success'} btn-estado" 
+                                    data-id="${row.id}" data-estado="${row.estado}" 
+                                    title="${row.estado == 1 ? 'Desactivar' : 'Activar'} ficha">
+                                <i class="bi ${row.estado == 1 ? 'bi-x-lg' : 'bi-check-lg'}"></i>
                             </button>
                         </div>
                     `;
@@ -830,7 +856,7 @@ $(document).ready(function() {
                             </div>
                             <div class="col-md-8">
                                 <div class="card mb-3">
-                                    <div class="card-header bg-light"><h5 class="mb-0">Tallas</h5></div>
+                                    <div class="card-header"><h5 class="mb-0">Tallas</h5></div>
                                     <div class="card-body">
                                         <div class="d-flex flex-wrap gap-2">
                     `;
@@ -845,7 +871,7 @@ $(document).ready(function() {
                     
                     html += `</div></div></div>
                              <div class="card mb-3">
-                                <div class="card-header bg-light"><h5 class="mb-0">Procesos</h5></div>
+                                <div class="card-header"><h5 class="mb-0">Procesos</h5></div>
                                 <div class="card-body">
                                     <table class="table table-sm">
                                         <thead>
@@ -877,7 +903,7 @@ $(document).ready(function() {
                         </table></div></div>
                         
                         <div class="card mb-3">
-                            <div class="card-header bg-light"><h5 class="mb-0">Materiales</h5></div>
+                            <div class="card-header"><h5 class="mb-0">Materiales</h5></div>
                             <div class="card-body">
                                 <table class="table table-sm">
                                     <thead>

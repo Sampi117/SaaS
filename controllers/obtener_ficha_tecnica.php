@@ -13,9 +13,9 @@ try {
     
     // Obtener información básica de la ficha técnica
     $stmt = $pdo->prepare(
-        "SELECT ft.*, c.nombre_categoria 
+        "SELECT ft.*, c.nombre as nombre_categoria 
          FROM fichas_tecnicas ft
-         LEFT JOIN categorias c ON ft.id_categoria = c.id_categoria
+         LEFT JOIN categorias c ON ft.id_categoria = c.id
          WHERE ft.id = ?"
     );
     $stmt->execute([$idFichaTecnica]);
@@ -31,19 +31,28 @@ try {
     $ficha['estado'] = (int)$ficha['estado'];
     
     // Obtener tallas
-    $stmt = $pdo->prepare("SELECT talla, genero FROM ficha_tecnica_tallas WHERE id_ficha_tecnica = ? ORDER BY talla ASC");
+    $stmt = $pdo->prepare("
+        SELECT talla, genero 
+        FROM ficha_tecnica_tallas 
+        WHERE id_ficha_tecnica = ? 
+        ORDER BY talla ASC
+    ");
     $stmt->execute([$idFichaTecnica]);
     $ficha['tallas'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Obtener procesos
-    $stmt = $pdo->prepare(
-        "SELECT p.id as id_proceso, p.nombre_proceso, 
-                ftp.mano_obra, ftp.liquidacion, ftp.total
-         FROM ficha_tecnica_procesos ftp
-         JOIN tb_procesos p ON ftp.id_proceso = p.id_proceso
-         WHERE ftp.id_ficha_tecnica = ?
-         ORDER BY ftp.id ASC"
-    );
+    // Obtener procesos con nombres
+    $stmt = $pdo->prepare("
+        SELECT 
+            p.id as id_proceso, 
+            p.nombre as nombre_proceso,
+            ftp.mano_obra, 
+            ftp.liquidacion, 
+            ftp.total
+        FROM ficha_tecnica_procesos ftp
+        JOIN tb_procesos p ON ftp.id_proceso = p.id
+        WHERE ftp.id_ficha_tecnica = ?
+        ORDER BY ftp.id ASC
+    ");
     $stmt->execute([$idFichaTecnica]);
     $ficha['procesos'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
@@ -56,17 +65,23 @@ try {
         $ficha['total_procesos'] += $proceso['total'];
     }
     
-    // Obtener materiales
-    $stmt = $pdo->prepare(
-        "SELECT m.id as id_material, m.nombre_material, 
-                m.descripcion, m.unidad_medida,
-                ftm.cantidad, ftm.ancho, ftm.alto, 
-                ftm.costo_unitario, ftm.total
-         FROM ficha_tecnica_materiales ftm
-         JOIN tb_materiales_directos m ON ftm.id_material = m.id
-         WHERE ftm.id_ficha_tecnica = ?
-         ORDER BY ftm.id ASC"
-    );
+    // Obtener materiales con nombres
+    $stmt = $pdo->prepare("
+        SELECT 
+            m.id as id_material, 
+            m.nombre as nombre_material,
+            m.descripcion, 
+            m.unidad_medida,
+            ftm.cantidad, 
+            ftm.ancho, 
+            ftm.alto, 
+            ftm.costo_unitario, 
+            ftm.total
+        FROM ficha_tecnica_materiales ftm
+        JOIN tb_materiales_directos m ON ftm.id_material = m.id
+        WHERE ftm.id_ficha_tecnica = ?
+        ORDER BY ftm.id ASC
+    ");
     $stmt->execute([$idFichaTecnica]);
     $ficha['materiales'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
@@ -82,11 +97,15 @@ try {
     }
     
     // Obtener costos fijos
-    $stmt = $pdo->prepare(
-        "SELECT costos_indirectos, costos_financieros, costos_distribucion, total_costos_fijos
-         FROM ficha_tecnica_costos_fijos 
-         WHERE id_ficha_tecnica = ?"
-    );
+    $stmt = $pdo->prepare("
+        SELECT 
+            costos_indirectos, 
+            costos_financieros, 
+            costos_distribucion, 
+            total_costos_fijos
+        FROM ficha_tecnica_costos_fijos 
+        WHERE id_ficha_tecnica = ?
+    ");
     $stmt->execute([$idFichaTecnica]);
     $costosFijos = $stmt->fetch(PDO::FETCH_ASSOC);
     
