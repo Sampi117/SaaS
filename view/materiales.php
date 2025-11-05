@@ -131,6 +131,17 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                                  <i class='bi bi-printer'></i>
                                               </a>";
                                             
+                                            // Botón para devolución (solo si no está en estado Devolución)
+                                            if ($mat['estado'] !== 'Devolución') {
+                                                echo '<button type="button" class="btn btn-sm btn-outline-info btn-devolucion me-1" 
+                                                       data-id="' . $mat['id'] . '"
+                                                       data-nombre="' . htmlspecialchars($mat['nombre'], ENT_QUOTES) . '"
+                                                       data-tipo="directo"
+                                                       title="Registrar devolución">
+                                                       <i class="bi bi-arrow-return-left"></i>
+                                                      </button>';
+                                            }
+                                            
                                             // Botón para activar/desactivar con estilo de categoría
                                             echo "<button class='btn btn-sm btn-outline-primary editar-estado-directo' 
                                                     data-id='" . $mat['id'] . "' 
@@ -272,14 +283,25 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                                    <i class='bi bi-printer'></i>
                                                 </a>";
                                             
+                                            // Botón para devolución (solo si no está en estado Devolución)
+                                            if ($m['estado'] !== 'Devolución') {
+                                                echo '<button type="button" class="btn btn-sm btn-outline-info btn-devolucion me-1" 
+                                                       data-id="' . $m['id'] . '"
+                                                       data-nombre="' . htmlspecialchars($m['nombre'], ENT_QUOTES) . '"
+                                                       data-tipo="indirecto"
+                                                       title="Registrar devolución">
+                                                       <i class="bi bi-arrow-return-left"></i>
+                                                      </button>';
+                                            }
+                                            
                                             // Botón para activar/desactivar con estilo de categoría
                                             echo "<button class='btn btn-sm btn-outline-primary editar-estado-indirecto' 
                                                     data-id='" . $m['id'] . "' 
                                                     data-estado='" . $m['estado'] . "' 
                                                     title='" . ($m['estado'] === 'Activo' ? 'Desactivar' : 'Activar') . "'>";
                                             echo "<i class='bi " . ($m['estado'] === 'Activo' ? 'bi-pause' : 'bi-play') . " me-1'></i>" . ($m['estado'] === 'Activo' ? 'Inactivar' : 'Activar') . "</button>";
-                                            echo "</td>";
-                                            echo "</tr>";
+                                            
+                            
                                         }
                                     } else {
                                         echo '<tr><td colspan="8" class="text-center">No hay materiales registrados</td></tr>';
@@ -289,8 +311,8 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                             </table>
                         </div>
 
-                    </div>
-                </div>
+                    </div> 
+                </div> <br><br>
             </div>
 
         </div>
@@ -366,9 +388,14 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                         <input type="text" class="form-control" name="nombre" required>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Imagen</label>
+                        <input type="file" class="form-control" name="imagen" accept="image/*">
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Descripción</label>
                         <textarea class="form-control" name="descripcion" rows="2"></textarea>
                     </div>
+                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -399,17 +426,9 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">Tallas (separadas por comas) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="inputTallas" name="tallas" placeholder="Ej: 36,38,40,42" required>
-                                <small class="text-muted">Ingrese las tallas separadas por comas</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="row">
+                        
+                        <p>Detalles de medidas</p>
+                        <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="form-label">Calibre</label>
@@ -432,11 +451,42 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="form-label">Peso (gr)</label>
+                                <label class="form-label">Peso (kg)</label>
                                 <input type="number" step="0.01" class="form-control" name="peso">
                             </div>
                         </div>
                     </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                                        
+                    <!-- Sección de tallas y cantidades -->
+                    <div class="card mt-3">
+                        <div class="card-header">
+                            <h6 class="mb-0">Gestión de Tallas y Cantidades</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label">Rango de Tallas (ej: 30-40)</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="rangoTallas" placeholder="Ej: 30-40" required>
+                                    <button type="button" class="btn btn-outline-primary" id="generarTallas">
+                                        <i class="bi bi-arrow-repeat"></i> Generar Tallas
+                                    </button>
+                                </div>
+                                <small class="text-muted">Ingrese el rango de tallas que desea agregar (ej: 30-40)</small>
+                            </div>
+                            
+                            <div id="contenedorTallas" class="table-responsive">
+                                <!-- Aquí se generará la tabla de tallas -->
+                                <p class="text-muted text-center my-3">Ingrese un rango de tallas o tallas personalizadas</p>
+                            </div>
+                            
+                            <input type="hidden" name="tallas_rango" id="tallasRango">
+                            <input type="hidden" name="tallas_lista" id="tallasLista">
+                        </div>
+                    </div> <br>
+                    
                     <div class="mb-3">
                         <label class="form-label">Proveedor <span class="text-danger">*</span></label>
                         <select class="form-select" name="proveedor_id" required>
@@ -453,10 +503,7 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                             <input type="number" step="0.01" class="form-control" name="costo" required>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label">Imagen</label>
-                        <input type="file" class="form-control" name="imagen" accept="image/*">
-                    </div>
+                    
                     <div class="mb-3">
                         <label class="form-label">Operaciones <span class="text-danger">*</span></label>
                         <div class="border p-2 rounded" style="max-height: 150px; overflow-y: auto;">
@@ -489,6 +536,74 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
+// Función para generar la tabla de tallas
+function generarTablaTallas(tallas) {
+    if (!tallas || tallas.length === 0) {
+        return '<p class="text-muted text-center my-3">No hay tallas para mostrar</p>';
+    }
+    
+    let html = `
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                    <tr>
+                        ${tallas.map(talla => `<th class="text-center">${talla}</th>`).join('')}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        ${tallas.map(talla => `
+                            <td>
+                                <input type="number" 
+                                       name="cantidades[${talla}]" 
+                                       class="form-control form-control-sm text-center" 
+                                       value="0" 
+                                       min="0">
+                            </td>
+                        `).join('')}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+    
+    return html;
+}
+
+// Manejar el botón de generar tallas
+document.getElementById('generarTallas').addEventListener('click', function() {
+    const rangoTallas = document.getElementById('rangoTallas').value.trim();
+    let tallas = [];
+    
+    // Limpiar campo
+    document.getElementById('tallasRango').value = '';
+    
+    // Validar y procesar rango de tallas
+    if (!rangoTallas.includes('-')) {
+        alert('Por favor ingrese un rango válido (ej: 30-40)');
+        return;
+    }
+    
+    const [inicio, fin] = rangoTallas.split('-').map(Number);
+    if (isNaN(inicio) || isNaN(fin) || inicio > fin) {
+        alert('Por favor ingrese un rango válido (ej: 30-40)');
+        return;
+    }
+    
+    // Generar array de tallas
+    for (let i = inicio; i <= fin; i++) {
+        tallas.push(i.toString());
+    }
+    document.getElementById('tallasRango').value = rangoTallas;
+    
+    if (tallas.length > 0) {
+        document.getElementById('contenedorTallas').innerHTML = generarTablaTallas(tallas);
+    } else {
+        document.getElementById('contenedorTallas').innerHTML = 
+            '<p class="text-muted text-center my-3">Ingrese un rango de tallas o tallas personalizadas</p>';
+    }
+});
+
 // Función para manejar la adición de nuevas operaciones
 function agregarNuevaOperacion(nombre) {
     if (!nombre.trim()) return;
@@ -634,10 +749,38 @@ function verDetalleMaterialDirecto(btn) {
                                 </div>
                             </div>
                             
-                            <h5 class="mt-4">Tallas Disponibles</h5>
+                            <h5 class="mt-4">Existencias por Talla</h5>
                             <hr class="mt-1">
-                            <div class="mb-3">
-                                ${tallasHtml}
+                            <div class="table-responsive mb-3">
+                                ${data.tallas && data.tallas.length > 0 ? `
+                                    <table class="table table-bordered table-sm">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Talla</th>
+                                                <th class="text-end">Cantidad</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${data.tallas.map(t => `
+                                                <tr>
+                                                    <td>${t.talla}</td>
+                                                    <td class="text-end">${parseInt(t.cantidad).toLocaleString()}</td>
+                                                </tr>
+                                            `).join('')}
+                                            <tr class="table-light fw-bold">
+                                                <td>Total</td>
+                                                <td class="text-end">
+                                                    ${data.tallas.reduce((sum, t) => sum + parseInt(t.cantidad || 0), 0).toLocaleString()}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                ` : `
+                                    <div class="alert alert-info mb-0">
+                                        <i class="bi bi-info-circle me-2"></i>
+                                        No hay información de tallas disponibles para este material.
+                                    </div>
+                                `}
                             </div>
                             
                             <h5 class="mt-4">Proveedor</h5>
@@ -646,8 +789,24 @@ function verDetalleMaterialDirecto(btn) {
                             
                             <div class="text-muted small mt-4">
                                 <p class="mb-0"><strong>Fecha de creación:</strong> ${data.fecha_creacion ? new Date(data.fecha_creacion).toLocaleDateString() : 'N/A'}</p>
-                                <p class="mb-0"><strong>Estado:</strong> ${data.estado === 'Activo' ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-secondary">Inactivo</span>'}</p>
+                                <p class="mb-0"><strong>Estado:</strong> ${data.estado === 'Activo' ? '<span class="badge bg-success">Activo</span>' : data.estado === 'Devolución' ? '<span class="badge bg-warning">En Devolución</span>' : '<span class="badge bg-secondary">Inactivo</span>'}</p>
                             </div>
+                            
+                            ${data.estado === 'Devolución' && data.devolucion ? `
+                            <div class="card border-warning mt-4">
+                                <div class="card-header bg-warning bg-opacity-10 text-black">
+                                    <h5 class="mb-0"><i class="bi bi-arrow-return-left me-2"></i>Información de Devolución</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p><strong>Fecha de Devolución:</strong> ${data.devolucion.fecha_devolucion ? new Date(data.devolucion.fecha_devolucion).toLocaleString() : 'N/A'}</p>
+                                    <p><strong>Razón de la Devolución:</strong></p>
+                                    <div class="alert alert-warning">
+                                        ${data.devolucion.razon || 'No se especificó una razón'}
+                                    </div>
+                                    ${data.devolucion.estado_anterior ? `<p><strong>Estado Anterior:</strong> ${data.devolucion.estado_anterior}</p>` : ''}
+                                </div>
+                            </div>
+                            ` : ''}
                         </div>
                     </div>
                 `;
@@ -675,7 +834,21 @@ function verDetalleMaterial(id) {
 
 // Función para cambiar el estado de un material directo
 function cambiarEstadoMaterialDirecto(id, estadoActual) {
+    // No permitir cambiar el estado si es una devolución
+    if (estadoActual === 'Devolución') {
+        mostrarError('No se puede cambiar el estado de un material devuelto');
+        return;
+    }
+    
     const nuevoEstado = estadoActual === 'Activo' ? 'Inactivo' : 'Activo';
+    
+    // Mostrar indicador de carga
+    const btn = document.querySelector(`.editar-estado-directo[data-id="${id}"]`);
+    if (btn) {
+        const originalHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+    }
     
     fetch(`../controllers/cambiar_estado_material_indirecto.php`, {
         method: 'POST',
@@ -688,21 +861,7 @@ function cambiarEstadoMaterialDirecto(id, estadoActual) {
     .then(data => {
         if (data.success) {
             // Mostrar mensaje de éxito
-            const toast = document.createElement('div');
-            toast.className = 'position-fixed top-0 end-0 p-3';
-            toast.style.zIndex = '1100';
-            toast.innerHTML = `
-                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header bg-success text-white">
-                        <strong class="me-auto">¡Éxito!</strong>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        El material ha sido ${nuevoEstado === 'Activo' ? 'activado' : 'desactivado'} correctamente.
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(toast);
+            mostrarMensajeExito(`El material ha sido ${nuevoEstado === 'Activo' ? 'activado' : 'desactivado'} correctamente`);
             
             // Actualizar la interfaz sin recargar la página
             const fila = document.querySelector(`tr[data-id="${id}"]`);
@@ -723,6 +882,8 @@ function cambiarEstadoMaterialDirecto(id, estadoActual) {
                         ${nuevoEstado === 'Activo' ? 'Inactivar' : 'Activar'}
                     `;
                     btnEstado.title = nuevoEstado === 'Activo' ? 'Desactivar' : 'Activar';
+                    btnEstado.disabled = false;
+                    btnEstado.innerHTML = btnEstado.innerHTML; // Restaurar HTML
                 }
             }
             
@@ -788,7 +949,21 @@ function cambiarEstadoMaterial(id, estadoActual) {
 
 // Función para cambiar el estado de un material indirecto
 function cambiarEstadoMaterialIndirecto(id, estadoActual) {
+    // No permitir cambiar el estado si es una devolución
+    if (estadoActual === 'Devolución') {
+        mostrarError('No se puede cambiar el estado de un material devuelto');
+        return;
+    }
+    
     const nuevoEstado = estadoActual === 'Activo' ? 'Inactivo' : 'Activo';
+    
+    // Mostrar indicador de carga
+    const btn = document.querySelector(`.editar-estado-indirecto[data-id="${id}"]`);
+    if (btn) {
+        const originalHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+    }
     
     fetch(`../controllers/cambiar_estado_material_indirecto.php`, {
         method: 'POST',
@@ -801,21 +976,7 @@ function cambiarEstadoMaterialIndirecto(id, estadoActual) {
     .then(data => {
         if (data.success) {
             // Mostrar mensaje de éxito
-            const toast = document.createElement('div');
-            toast.className = 'position-fixed top-0 end-0 p-3';
-            toast.style.zIndex = '1100';
-            toast.innerHTML = `
-                <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header bg-success text-white">
-                        <strong class="me-auto">¡Éxito!</strong>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        El material ha sido ${nuevoEstado === 'Activo' ? 'activado' : 'desactivado'} correctamente.
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(toast);
+            mostrarMensajeExito(`El material ha sido ${nuevoEstado === 'Activo' ? 'activado' : 'desactivado'} correctamente`);
             
             // Actualizar la interfaz sin recargar la página
             const fila = document.querySelector(`tr[data-id="${id}"]`);
@@ -836,6 +997,8 @@ function cambiarEstadoMaterialIndirecto(id, estadoActual) {
                         ${nuevoEstado === 'Activo' ? 'Inactivar' : 'Activar'}
                     `;
                     btnEstado.title = nuevoEstado === 'Activo' ? 'Desactivar' : 'Activar';
+                    btnEstado.disabled = false;
+                    btnEstado.innerHTML = btnEstado.innerHTML; // Restaurar HTML
                 }
             }
             
@@ -899,55 +1062,105 @@ function verDetalleMaterialIndirecto(id) {
     const btn = document.querySelector(`.ver-material[data-id="${id}"]`);
     if (!btn) return;
     
-    const nombre = btn.dataset.nombre;
-    const unidad = btn.dataset.unidad;
-    const costo = parseFloat(btn.dataset.costo).toFixed(2);
-    const cantidad = btn.dataset.cantidad;
-    const fecha = btn.dataset.fecha;
-    const estado = btn.dataset.estado;
-    const proveedor = btn.dataset.proveedor || 'No especificado';
+    // Mostrar spinner de carga
+    const modalBody = document.querySelector('#modalVerMaterial .modal-body');
+    if (!modalBody) return;
     
-    // Formatear la fecha
-    const fechaObj = new Date(fecha);
-    const fechaFormateada = fechaObj.toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    
-    // Crear el contenido del modal
-    const contenido = `
-        <div class="row">
-            <div class="col-md-6">
-                <p><strong>ID:</strong> ${id}</p>
-                <p><strong>Nombre:</strong> ${nombre}</p>
-                <p><strong>Unidad de Medida:</strong> ${unidad}</p>
-                <p><strong>Costo Unitario:</strong> $${costo}</p>
+    modalBody.innerHTML = `
+        <div class="text-center my-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
             </div>
-            <div class="col-md-6">
-                <p><strong>Cantidad:</strong> ${cantidad}</p>
-                <p><strong>Proveedor:</strong> ${proveedor}</p>
-                <p><strong>Fecha de Registro:</strong> ${fechaFormateada}</p>
-                <p><strong>Estado:</strong> 
-                    <span class="badge bg-${estado === 'Activo' ? 'success' : 'secondary'}">
-                        ${estado}
-                    </span>
-                </p>
-            </div>
+            <p class="mt-2">Cargando información del material...</p>
         </div>
     `;
     
-    // Actualizar el contenido del modal
-    const modalBody = document.querySelector('#modalVerMaterial .modal-body');
-    if (modalBody) {
-        modalBody.innerHTML = contenido;
-        
-        // Mostrar el modal
-        const modal = new bootstrap.Modal(document.getElementById('modalVerMaterial'));
-        modal.show();
-    }
+    // Mostrar el modal
+    const modal = new bootstrap.Modal(document.getElementById('modalVerMaterial'));
+    modal.show();
+    
+    // Obtener los datos del material
+    fetch(`../controllers/obtener_material_indirecto.php?id=${id}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                modalBody.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        Error al cargar el material: ${data.error}
+                    </div>
+                `;
+                return;
+            }
+            
+            // Formatear la fecha
+            const fechaObj = new Date(data.fecha_creacion);
+            const fechaFormateada = fechaObj.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // Construir el HTML del contenido
+            let contenido = `
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Información Básica</h5>
+                        <hr class="mt-1">
+                        <p><strong>ID:</strong> ${data.id}</p>
+                        <p><strong>Nombre:</strong> ${data.nombre}</p>
+                        <p><strong>Unidad de Medida:</strong> ${data.unidad_medida || 'No especificada'}</p>
+                        <p><strong>Costo Unitario:</strong> $${parseFloat(data.costo_unitario || 0).toFixed(2)}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Detalles</h5>
+                        <hr class="mt-1">
+                        <p><strong>Cantidad:</strong> ${data.cantidad || 0}</p>
+                        <p><strong>Proveedor:</strong> ${data.proveedor_nombre || 'No especificado'}</p>
+                        <p><strong>Fecha de Registro:</strong> ${fechaFormateada}</p>
+                        <p><strong>Estado:</strong> 
+                            <span class="badge bg-${data.estado === 'Activo' ? 'success' : data.estado === 'Devolución' ? 'warning' : 'secondary'}">
+                                ${data.estado}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            // Agregar sección de devolución si el material está en estado Devolución
+            if (data.estado === 'Devolución' && data.devolucion) {
+                const fechaDevolucion = new Date(data.devolucion.fecha_devolucion).toLocaleString('es-ES');
+                contenido += `
+                    <div class="card border-warning mt-4">
+                        <div class="card-header bg-warning bg-opacity-10 text-black">
+                            <h5 class="mb-0"><i class="bi bi-arrow-return-left me-2"></i>Información de Devolución</h5>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Fecha de Devolución:</strong> ${fechaDevolucion}</p>
+                            <p><strong>Razón de la Devolución:</strong></p>
+                            <div class="alert alert-warning">
+                                ${data.devolucion.razon || 'No se especificó una razón'}
+                            </div>
+                            ${data.devolucion.estado_anterior ? `<p><strong>Estado Anterior:</strong> ${data.devolucion.estado_anterior}</p>` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Actualizar el contenido del modal
+            modalBody.innerHTML = contenido;
+        })
+        .catch(error => {
+            console.error('Error al cargar el material:', error);
+            modalBody.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Error al cargar la información del material. Por favor, intente nuevamente.
+                </div>
+            `;
+        });
 }
 
 // Manejar clic en el botón de ver material indirecto
@@ -1130,4 +1343,228 @@ document.getElementById('formCargaMasivaIndirecto').addEventListener('submit', f
 });
 </script>
 
+<!-- Modal de Devolución -->
+<div class="modal fade" id="modalDevolucion" tabindex="-1" aria-labelledby="modalDevolucionLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="modalDevolucionLabel">Registrar Devolución</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="devolucionMaterialId">
+                <input type="hidden" id="devolucionTipoMaterial">
+                
+                <div class="mb-3">
+                    <p>¿Está seguro que desea registrar una devolución para el siguiente material?</p>
+                    <p class="fw-bold" id="devolucionNombreMaterial"></p>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="razonDevolucion" class="form-label">Razón de la devolución <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="razonDevolucion" rows="3" required></textarea>
+                    <div class="invalid-feedback">Por favor ingrese la razón de la devolución</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-warning" id="btnConfirmarDevolucion">
+                    <i class="bi bi-arrow-return-left"></i> Registrar Devolución
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php include_once '../includes/footer.php'; ?>
+
+<script>
+// Función para mostrar el modal de devolución
+function mostrarModalDevolucion(btn) {
+    try {
+        const id = btn.getAttribute('data-id');
+        const nombre = btn.getAttribute('data-nombre') || 'Material';
+        const tipo = btn.getAttribute('data-tipo');
+        
+        if (!id || !tipo) {
+            throw new Error('Datos del material no válidos');
+        }
+        
+        // Actualizar los campos del modal
+        document.getElementById('devolucionMaterialId').value = id;
+        document.getElementById('devolucionTipoMaterial').value = tipo;
+        document.getElementById('devolucionNombreMaterial').textContent = nombre;
+        document.getElementById('razonDevolucion').value = '';
+        
+        // Mostrar el modal
+        const modal = new bootstrap.Modal(document.getElementById('modalDevolucion'));
+        modal.show();
+        
+        // Enfocar el campo de razón cuando se muestre el modal
+        setTimeout(() => {
+            document.getElementById('razonDevolucion').focus();
+        }, 500);
+        
+    } catch (error) {
+        console.error('Error al mostrar el modal de devolución:', error);
+        mostrarError('Error al abrir el formulario: ' + error.message);
+    }
+}
+
+// Función para procesar la devolución
+async function procesarDevolucion() {
+    const id = document.getElementById('devolucionMaterialId').value;
+    const tipo = document.getElementById('devolucionTipoMaterial').value;
+    const razon = document.getElementById('razonDevolucion').value.trim();
+    const btnConfirmar = document.getElementById('btnConfirmarDevolucion');
+    
+    // Validar campo requerido
+    if (!razon) {
+        document.getElementById('razonDevolucion').classList.add('is-invalid');
+        return;
+    }
+    
+    // Mostrar indicador de carga
+    const btnOriginalText = btnConfirmar.innerHTML;
+    btnConfirmar.disabled = true;
+    btnConfirmar.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Procesando...';
+    
+    try {
+        const formData = new FormData();
+        formData.append('id', id);
+        formData.append('tipo_material', tipo);
+        formData.append('razon', razon);
+        
+        const response = await fetch('../controllers/procesar_devolucion.php', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Error al procesar la devolución');
+        }
+        
+        if (data.success) {
+            // Mostrar mensaje de éxito
+            mostrarMensajeExito(data.message || 'Devolución registrada correctamente');
+            
+            // Cerrar el modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalDevolucion'));
+            modal.hide();
+            
+            // Recargar la página después de 1 segundo
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } else {
+            throw new Error(data.message || 'Error al procesar la devolución');
+        }
+        
+    } catch (error) {
+        console.error('Error en procesarDevolucion:', error);
+        mostrarError(error.message || 'Error al procesar la devolución. Por favor, intente de nuevo.');
+    } finally {
+        // Restaurar el botón
+        btnConfirmar.disabled = false;
+        btnConfirmar.innerHTML = btnOriginalText;
+    }
+}
+
+// Función auxiliar para mostrar errores
+function mostrarError(mensaje) {
+    console.error('Error:', mensaje);
+    
+    // Mostrar en toast si está disponible
+    const toastElement = document.getElementById('toastError');
+    if (toastElement) {
+        const toast = new bootstrap.Toast(toastElement);
+        const toastBody = toastElement.querySelector('.toast-body');
+        if (toastBody) {
+            toastBody.textContent = mensaje;
+        }
+        toast.show();
+        return;
+    }
+    
+    // Si no hay toast, mostrar alerta
+    alert('Error: ' + mensaje);
+}
+
+// Función auxiliar para mostrar mensajes de éxito
+function mostrarMensajeExito(mensaje) {
+    console.log('Éxito:', mensaje);
+    
+    // Crear y mostrar toast de éxito
+    const toastContainer = document.createElement('div');
+    toastContainer.className = 'position-fixed top-0 end-0 p-3';
+    toastContainer.style.zIndex = '1100';
+    
+    const toastId = 'toast-' + Date.now();
+    toastContainer.innerHTML = `
+        <div id="${toastId}" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <strong class="me-auto">¡Éxito!</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                ${mensaje}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(toastContainer);
+    
+    // Eliminar el toast después de 3 segundos
+    setTimeout(() => {
+        const toast = document.getElementById(toastId);
+        if (toast) {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+                if (toastContainer.parentNode) {
+                    toastContainer.remove();
+                }
+            }, 300);
+        }
+    }, 3000);
+    
+    return { toast: toastContainer, id: toastId };
+    
+    // Si no hay toast, mostrar alerta
+    alert('Éxito: ' + mensaje);
+}
+
+// Inicializar eventos cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    // Delegación de eventos para los botones de devolución
+    document.body.addEventListener('click', function(e) {
+        const btn = e.target.closest('.btn-devolucion');
+        if (btn) {
+            e.preventDefault();
+            mostrarModalDevolucion(btn);
+        }
+    });
+    
+    // Manejar el envío del formulario de devolución
+    document.getElementById('btnConfirmarDevolucion').addEventListener('click', procesarDevolucion);
+    
+    // Validar campo de razón al cambiar
+    document.getElementById('razonDevolucion').addEventListener('input', function() {
+        if (this.value.trim()) {
+            this.classList.remove('is-invalid');
+        }
+    });
+    
+    // Limpiar validación al cerrar el modal
+    document.getElementById('modalDevolucion').addEventListener('hidden.bs.modal', function() {
+        document.getElementById('razonDevolucion').classList.remove('is-invalid');
+    });
+});
+</script>

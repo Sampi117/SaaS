@@ -12,13 +12,13 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $material_id = (int)$_GET['id'];
 
 try {
-    // Obtener la información básica del material
+    // Obtener la información básica del material indirecto
     $sql = "SELECT 
-                md.*, 
+                mi.*, 
                 p.nombre as proveedor_nombre
-            FROM tb_materiales_directos md
-            LEFT JOIN tb_proveedores p ON md.proveedor_id = p.id
-            WHERE md.id = :id";
+            FROM tb_materiales_indirectos mi
+            LEFT JOIN tb_proveedores p ON mi.proveedor_id = p.id
+            WHERE mi.id = :id";
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':id' => $material_id]);
@@ -39,20 +39,10 @@ try {
     $stmt_operaciones->execute([':material_id' => $material_id]);
     $operaciones = $stmt_operaciones->fetchAll(PDO::FETCH_ASSOC);
     
-    // Obtener las tallas y cantidades
-    $sql_tallas = "SELECT talla, cantidad 
-                  FROM tb_material_tallas 
-                  WHERE material_id = :material_id
-                  ORDER BY CAST(talla AS DECIMAL(10,2))";
-    
-    $stmt_tallas = $pdo->prepare($sql_tallas);
-    $stmt_tallas->execute([':material_id' => $material_id]);
-    $tallas = $stmt_tallas->fetchAll(PDO::FETCH_ASSOC);
-    
     // Si el material está en estado 'Devolución', obtener los detalles de la devolución
     if ($material['estado'] === 'Devolución') {
         $sql_devolucion = "SELECT * FROM tb_devoluciones_materiales 
-                          WHERE material_id = :material_id AND tipo_material = 'directo'
+                          WHERE material_id = :material_id AND tipo_material = 'indirecto'
                           ORDER BY fecha_devolucion DESC LIMIT 1";
         
         $stmt_devolucion = $pdo->prepare($sql_devolucion);
@@ -64,9 +54,8 @@ try {
         }
     }
     
-    // Agregar las operaciones y tallas al array del material
+    // Agregar las operaciones al array del material
     $material['operaciones'] = $operaciones;
-    $material['tallas'] = $tallas;
     
     // Devolver los datos en formato JSON
     echo json_encode($material, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);

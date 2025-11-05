@@ -98,7 +98,7 @@ include_once '../includes/sidebar.php';
                 </tbody>
             </table>
         </div>
-    </div>
+    </div> <br><br>
 </div>
 
 <!-- MODAL AGREGAR CATEGORÍA -->

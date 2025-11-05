@@ -24,8 +24,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Procesar las tallas
-        $tallas = isset($_POST['tallas']) ? 
-                 array_map('trim', explode(',', $_POST['tallas'])) : [];
+        $tallas = [];
+        $tallas_cantidades = [];
+        
+        if (isset($_POST['tallas_rango'])) {
+            // Procesar rango de tallas (ej: 30-40)
+            list($inicio, $fin) = array_map('intval', explode('-', $_POST['tallas_rango']));
+            for ($i = $inicio; $i <= $fin; $i++) {
+                $tallas[] = (string)$i;
+                $tallas_cantidades[$i] = 0; // Inicializar con cantidad 0
+            }
+        } elseif (isset($_POST['tallas_lista'])) {
+            // Procesar lista de tallas separadas por comas
+            $tallas = array_map('trim', explode(',', $_POST['tallas_lista']));
+            foreach ($tallas as $talla) {
+                $tallas_cantidades[$talla] = 0; // Inicializar con cantidad 0
+            }
+        }
+        
+        // Procesar cantidades si se enviaron
+        if (isset($_POST['cantidades']) && is_array($_POST['cantidades'])) {
+            foreach ($_POST['cantidades'] as $talla => $cantidad) {
+                if (isset($tallas_cantidades[$talla])) {
+                    $tallas_cantidades[$talla] = intval($cantidad);
+                }
+            }
+        }
+        
         $tallas_json = json_encode($tallas);
 
         // Insertar el material directo
@@ -107,10 +132,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         
-        // Confirmar la transacción
+        // Insertar tallas y cantidades
+        if (!empty($tallas_cantidades)) {
+            $sql_tallas = "INSERT INTO tb_material_tallas (material_id, talla, cantidad) 
+                          VALUES (:material_id, :talla, :cantidad)
+                          ON DUPLICATE KEY UPDATE cantidad = VALUES(cantidad)";
+            $stmt_tallas = $pdo->prepare($sql_tallas);
+            
+            foreach ($tallas_cantidades as $talla => $cantidad) {
+                $stmt_tallas->execute([
+                    ':material_id' => $material_id,
+                    ':talla' => $talla,
+                    ':cantidad' => $cantidad
+                ]);
+            }
+        }
+        
+        // Confirmar transacción
         $pdo->commit();
         
-        // Redirigir con mensaje de éxito
+        echo json_encode([
+            'success' => true, 
+            'message' => 'Material guardado correctamente',
+            'material_id' => $material_id
+        ]);
         header("Location: ../view/materiales.php?msg=Material directo guardado correctamente&msg_type=success");
         exit();
         
