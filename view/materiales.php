@@ -123,6 +123,14 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                                     title='Ver Detalles'>";
                                             echo "<i class='bi bi-eye'></i></button>";
                                             
+                                            // Botón para generar factura
+                                            echo "<a href='../reportes/generar_factura.php?tipo=directo&id=" . $mat['id'] . "' 
+                                                 class='btn btn-sm btn-outline-secondary me-1' 
+                                                 target='_blank'
+                                                 title='Generar Factura'>
+                                                 <i class='bi bi-printer'></i>
+                                              </a>";
+                                            
                                             // Botón para activar/desactivar con estilo de categoría
                                             echo "<button class='btn btn-sm btn-outline-primary editar-estado-directo' 
                                                     data-id='" . $mat['id'] . "' 
@@ -171,9 +179,14 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                 <input type="text" name="buscar" class="form-control" placeholder="Buscar por nombre" value="<?= isset($_GET['buscar']) ? htmlspecialchars($_GET['buscar']) : '' ?>">
                                 <button class="btn btn-outline-primary" type="submit"><i class="bi bi-search"></i></button>
                             </form>
-                            <button class="btn btn-primary d-flex align-items-center mb-2" data-bs-toggle="modal" data-bs-target="#modalAgregarMaterial">
-                                <i class="bi bi-plus-lg me-2"></i> Añadir Material
-                            </button>
+                            <div class="btn-group">
+                                <button class="btn btn-primary d-flex align-items-center mb-2" data-bs-toggle="modal" data-bs-target="#modalAgregarMaterial">
+                                    <i class="bi bi-plus-lg me-2"></i> Añadir Material
+                                </button>
+                                <a href="../reports/materiales_indirectos.php" class="btn btn-success d-flex align-items-center mb-2 ms-2">
+                                    <i class="bi bi-upload me-2"></i> Carga Masiva
+                                </a>
+                            </div>
                         </div>
 
                         <!-- Tabla de Materiales -->
@@ -186,6 +199,7 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                         <th>Unidad de Medida</th>
                                         <th>Costo (COP)</th>
                                         <th>Cantidad</th>
+                                        <th>Proveedor</th>
                                         <th>Fecha Registro</th>
                                         <th>Estado</th>
                                         <th>Acciones</th>
@@ -195,7 +209,11 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                     <?php
                                     include("../config/conexion.php");
                                     $busqueda = isset($_GET['buscar']) ? $_GET['buscar'] : '';
-                                    $sql = "SELECT * FROM tb_materiales_indirectos WHERE nombre LIKE :buscar ORDER BY id DESC";
+                                    $sql = "SELECT mi.*, p.nombre as nombre_proveedor 
+                                            FROM tb_materiales_indirectos mi 
+                                            LEFT JOIN tb_proveedores p ON mi.proveedor_id = p.id 
+                                            WHERE mi.nombre LIKE :buscar 
+                                            ORDER BY mi.id DESC";
                                     $stmt = $pdo->prepare($sql);
                                     $stmt->execute(['buscar' => "%$busqueda%"]);
                                     $materiales = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -210,11 +228,31 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                             echo "<td>" . htmlspecialchars($m['unidad_medida']) . "</td>";
                                             echo "<td>$" . number_format($m['costo'], 2, ',', '.') . "</td>";
                                             echo "<td>" . $m['cantidad'] . "</td>";
+                                            // Obtener nombre del proveedor
+                                            $proveedor_nombre = 'N/A';
+                                            if (!empty($m['proveedor_id'])) {
+                                                $sql_prov = "SELECT nombre FROM tb_proveedores WHERE id = ?";
+                                                $stmt_prov = $pdo->prepare($sql_prov);
+                                                $stmt_prov->execute([$m['proveedor_id']]);
+                                                $proveedor = $stmt_prov->fetch(PDO::FETCH_ASSOC);
+                                                $proveedor_nombre = $proveedor ? $proveedor['nombre'] : 'N/A';
+                                            }
+                                            echo "<td>" . htmlspecialchars($proveedor_nombre) . "</td>";
                                             echo "<td>" . $m['fecha_creacion'] . "</td>";
                                             echo "<td><span class='badge bg-{$estadoClass}'>" . $m['estado'] . "</span></td>";
                                             
                                             echo "<td class='text-nowrap'>";
                                             // Botón para ver detalles
+                                            // Obtener nombre del proveedor para el data attribute
+                                            $proveedor_nombre = 'N/A';
+                                            if (!empty($m['proveedor_id'])) {
+                                                $sql_prov = "SELECT nombre FROM tb_proveedores WHERE id = ?";
+                                                $stmt_prov = $pdo->prepare($sql_prov);
+                                                $stmt_prov->execute([$m['proveedor_id']]);
+                                                $proveedor = $stmt_prov->fetch(PDO::FETCH_ASSOC);
+                                                $proveedor_nombre = $proveedor ? $proveedor['nombre'] : 'N/A';
+                                            }
+                                            
                                             echo "<button class='btn btn-sm btn-outline-primary ver-material me-1' 
                                                     data-id='" . $m['id'] . "' 
                                                     data-nombre='" . htmlspecialchars($m['nombre']) . "' 
@@ -222,8 +260,17 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
                                                     data-costo='" . $m['costo'] . "' 
                                                     data-cantidad='" . $m['cantidad'] . "' 
                                                     data-fecha='" . $m['fecha_creacion'] . "' 
-                                                    data-estado='" . $m['estado'] . "'>";
+                                                    data-estado='" . $m['estado'] . "'
+                                                    data-proveedor='" . htmlspecialchars($proveedor_nombre) . "'>";
                                             echo "<i class='bi bi-eye'></i></button>";
+                                            
+                                            // Botón para generar factura
+                                              echo "<a href='../reportes/generar_factura.php?tipo=indirecto&id=" . $m['id'] . "' 
+                                                   class='btn btn-sm btn-outline-secondary me-1' 
+                                                   target='_blank'
+                                                   title='Generar Factura'>
+                                                   <i class='bi bi-printer'></i>
+                                                </a>";
                                             
                                             // Botón para activar/desactivar con estilo de categoría
                                             echo "<button class='btn btn-sm btn-outline-primary editar-estado-indirecto' 
@@ -282,6 +329,15 @@ $operaciones = $pdo->query($sql_operaciones)->fetchAll(PDO::FETCH_ASSOC);
           <div class="mb-3">
             <label>Cantidad:</label>
             <input type="number" class="form-control" name="cantidad" min="0" required>
+          </div>
+          <div class="mb-3">
+            <label>Proveedor:</label>
+            <select class="form-select" name="proveedor_id">
+              <option value="">Seleccione un proveedor (opcional)</option>
+              <?php foreach ($proveedores as $proveedor): ?>
+                <option value="<?= $proveedor['id'] ?>"><?= htmlspecialchars($proveedor['nombre']) ?></option>
+              <?php endforeach; ?>
+            </select>
           </div>
           <div class="text-end">
             <button type="submit" class="btn btn-primary">Guardar</button>
@@ -849,6 +905,7 @@ function verDetalleMaterialIndirecto(id) {
     const cantidad = btn.dataset.cantidad;
     const fecha = btn.dataset.fecha;
     const estado = btn.dataset.estado;
+    const proveedor = btn.dataset.proveedor || 'No especificado';
     
     // Formatear la fecha
     const fechaObj = new Date(fecha);
@@ -871,6 +928,7 @@ function verDetalleMaterialIndirecto(id) {
             </div>
             <div class="col-md-6">
                 <p><strong>Cantidad:</strong> ${cantidad}</p>
+                <p><strong>Proveedor:</strong> ${proveedor}</p>
                 <p><strong>Fecha de Registro:</strong> ${fechaFormateada}</p>
                 <p><strong>Estado:</strong> 
                     <span class="badge bg-${estado === 'Activo' ? 'success' : 'secondary'}">
@@ -939,5 +997,137 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 </div>
+
+<!-- Modal Carga Masiva Materiales Indirectos -->
+<div class="modal fade" id="modalCargaMasivaIndirecto" tabindex="-1" aria-labelledby="modalCargaMasivaIndirectoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalCargaMasivaIndirectoLabel">Carga Masiva - Materiales Indirectos</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formCargaMasivaIndirecto" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <p>Suba un archivo Excel con los materiales indirectos a importar.</p>
+                    <div class="mb-3">
+                        <label for="archivo" class="form-label">Archivo Excel</label>
+                        <input class="form-control" type="file" id="archivo" name="archivo" accept=".xlsx, .xls" required>
+                        <div class="form-text">
+                            <a href="../templates/generar_plantilla_indirectos.php" class="text-decoration-none">
+                                <i class="bi bi-download"></i> Descargar plantilla de ejemplo
+                            </a>
+                        </div>
+                    </div>
+                    <div id="resultadoCarga" class="d-none">
+                        <div class="alert alert-info">
+                            <div class="d-flex align-items-center">
+                                <div class="spinner-border spinner-border-sm me-2" role="status" id="spinnerCarga">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <span id="mensajeCarga">Procesando archivo, por favor espere...</span>
+                            </div>
+                        </div>
+                        <div id="detallesCarga" class="mt-3"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary" id="btnProcesarCarga">Procesar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// Manejar el envío del formulario de carga masiva
+document.getElementById('formCargaMasivaIndirecto').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const resultadoDiv = document.getElementById('resultadoCarga');
+    const detallesDiv = document.getElementById('detallesCarga');
+    const mensajeCarga = document.getElementById('mensajeCarga');
+    const btnProcesar = document.getElementById('btnProcesarCarga');
+    const spinner = document.getElementById('spinnerCarga');
+    
+    // Mostrar resultados y spinner
+    resultadoDiv.classList.remove('d-none');
+    btnProcesar.disabled = true;
+    spinner.classList.remove('d-none');
+    mensajeCarga.textContent = 'Procesando archivo, por favor espere...';
+    detallesDiv.innerHTML = '';
+    
+    // Enviar archivo al servidor
+    fetch('../controllers/procesar_carga_masiva_indirectos.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Ocultar spinner
+        spinner.classList.add('d-none');
+        
+        if (data.success) {
+            mensajeCarga.innerHTML = `<strong>¡Carga completada!</strong> ${data.message}`;
+            
+            // Mostrar resumen
+            let html = `
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle-fill"></i> ${data.imported} registros importados correctamente
+                </div>
+            `;
+            
+            if (data.failed > 0) {
+                html += `
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i> ${data.failed} registros no se pudieron importar
+                    </div>
+                `;
+            }
+            
+            // Mostrar detalles de errores si los hay
+            if (data.failed > 0) {
+                html += '<h6 class="mt-3">Detalles de errores:</h6><div class="table-responsive"><table class="table table-sm table-bordered">';
+                html += '<thead><tr><th>Fila</th><th>Error</th><th>Datos</th></tr></thead><tbody>';
+                
+                data.details.forEach(detail => {
+                    if (detail.status === 'error') {
+                        html += `<tr>
+                            <td>${detail.row}</td>
+                            <td>${detail.message}</td>
+                            <td>${JSON.stringify(detail.data)}</td>
+                        </tr>`;
+                    }
+                });
+                
+                html += '</tbody></table></div>';
+            }
+            
+            detallesDiv.innerHTML = html;
+            
+            // Recargar la página después de 3 segundos si hay éxito
+            if (data.imported > 0) {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
+            }
+            
+        } else {
+            mensajeCarga.innerHTML = `<strong>Error:</strong> ${data.message}`;
+            detallesDiv.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        spinner.classList.add('d-none');
+        mensajeCarga.innerHTML = '<strong>Error:</strong> Ocurrió un error al procesar el archivo';
+        detallesDiv.innerHTML = '<div class="alert alert-danger">' + error.message + '</div>';
+    })
+    .finally(() => {
+        btnProcesar.disabled = false;
+    });
+});
+</script>
 
 <?php include_once '../includes/footer.php'; ?>
