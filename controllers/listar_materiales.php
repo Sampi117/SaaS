@@ -8,15 +8,15 @@ require_once '../config/conexion.php';
 $materiales = [];
 
 try {
+    // Listar materiales indirectos activos (usados en fichas técnicas)
     $stmt = $pdo->prepare("
         SELECT 
             id as id_material, 
             nombre as nombre_material, 
-            descripcion, 
             unidad_medida, 
-            costo as costo_unitario 
-        FROM tb_materiales_directos 
-        WHERE estado = 'Activo' 
+            costo as costo_unitario
+        FROM tb_materiales_indirectos
+        WHERE estado = 'Activo'
         ORDER BY nombre ASC
     ");
     $stmt->execute();

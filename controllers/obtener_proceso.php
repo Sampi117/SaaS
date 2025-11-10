@@ -17,20 +17,8 @@ try {
         throw new Exception('Proceso no encontrado');
     }
 
-    // Obtener detalles de las operaciones con sus costos y tiempos individuales
-    $stmt = $pdo->prepare("
-        SELECT 
-            o.id as operacion_id, 
-            o.nombre, 
-            po.costo, 
-            po.costo_terceros, 
-            po.tiempo_estimado, 
-            po.orden
-        FROM tb_proceso_operaciones po
-        INNER JOIN tb_operaciones o ON po.operacion_id = o.id
-        WHERE po.proceso_id = ?
-        ORDER BY po.orden ASC
-    ");
+    // Obtener detalles de las operaciones (solo operaciones activas) con sus costos y tiempos individuales
+    $stmt = $pdo->prepare("\n        SELECT \n            o.id as operacion_id, \n            o.nombre, \n            o.descripcion as operacion_descripcion,\n            po.costo, \n            po.costo_terceros, \n            po.tiempo_estimado, \n            po.orden\n        FROM tb_proceso_operaciones po\n        INNER JOIN tb_operaciones o ON po.operacion_id = o.id AND o.estado = 'Activo'\n        WHERE po.proceso_id = ?\n        ORDER BY po.orden ASC\n    ");
     $stmt->execute([$_GET['id']]);
     $operaciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

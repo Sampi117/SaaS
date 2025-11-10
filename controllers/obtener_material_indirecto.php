@@ -15,14 +15,36 @@ try {
     // Obtener la información básica del material indirecto
     $sql = "SELECT 
                 mi.*, 
-                p.nombre as proveedor_nombre
+                p.nombre as proveedor_nombre,
+                dm.id as devolucion_id,
+                dm.fecha_devolucion,
+                dm.razon,
+                dm.estado_anterior
             FROM tb_materiales_indirectos mi
             LEFT JOIN tb_proveedores p ON mi.proveedor_id = p.id
+            LEFT JOIN tb_devoluciones_materiales dm ON dm.material_id = mi.id AND dm.tipo_material = 'indirecto'
             WHERE mi.id = :id";
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':id' => $material_id]);
     $material = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    // Si hay información de devolución, formatearla
+    $devolucion = null;
+    if ($material && $material['devolucion_id']) {
+        $devolucion = [
+            'id' => $material['devolucion_id'],
+            'fecha_devolucion' => $material['fecha_devolucion'],
+            'razon' => $material['razon'],
+            'estado_anterior' => $material['estado_anterior']
+        ];
+        
+        // Eliminar los campos de devolución del array principal para evitar duplicados
+        unset($material['devolucion_id']);
+        unset($material['fecha_devolucion']);
+        unset($material['razon']);
+        unset($material['estado_anterior']);
+    }
     
     if (!$material) {
         echo json_encode(['error' => 'Material no encontrado']);
